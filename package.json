@@ -1,0 +1,38 @@
+{
+  "name": "tinyBlockchain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "nodemon": "NODE_PATH=./src nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "^6.21.0",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-polyfill": "^6.20.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "bcrypt-nodejs": "0.0.3",
+    "bluebird": "^3.4.7",
+    "body-parser": "^1.18.2",
+    "bookshelf": "^0.12.0",
+    "bookshelf-validate": "^2.0.3",
+    "co-express": "^1.2.2",
+    "cors": "^2.8.4",
+    "express": "^4.14.0",
+    "express-session": "^1.15.6",
+    "knex": "^0.14.2",
+    "mysql": "^2.15.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "validator": "^9.2.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "^6.2.10",
+    "nodemon": "^1.11.0"
+  }
+}
