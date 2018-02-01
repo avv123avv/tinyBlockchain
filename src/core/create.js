@@ -1,5 +1,5 @@
 import moment from 'moment';
-import Block from './Block';
+import Block from './block';
 
 const createGenesisBlock = () => (
   new Block({
