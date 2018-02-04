@@ -1,7 +1,7 @@
-const db = (process.env.NODE_ENV === 'dev') ? 'tinyBlockchain_dev' : 'tinyBlockchain'
+const db = (process.env.NODE_ENV === 'dev') ? 'tinyBlockchain_dev' : 'tinyBlockchain';
 
 module.exports = {
-  
+
   client: 'mysql',
   connection: {
     host: '127.0.0.1',
@@ -17,5 +17,5 @@ module.exports = {
   migrations: {
     tableName: 'knex_migrations'
   }
-  
+
 };
