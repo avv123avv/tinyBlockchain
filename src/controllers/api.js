@@ -1,18 +1,26 @@
 import express from 'express';
 import request from 'request';
 
-import Block from '../core/block';
 import { createGenesisBlock, createNextBlock } from '../core/create';
 import minerAddress from '../core/address';
+import Blocks from '../models/blocks';
+import Transactions from '../models/transactions';
 
 const router = express.Router();
 
-let blockchain = [];
-let ourTransactions = [];
 const peerNodes = [];
-const mining = true;
 
-blockchain.push(createGenesisBlock());
+const createBlockchain = () => {
+  return Blocks.fetchAll()
+    .then(blocks => {
+      if (blocks.length < 1) {
+        return new Blocks(createGenesisBlock()).save();
+      }
+    })
+    .catch(error => {
+      console.error('createBlockchain error:', error);
+    });
+};
 
 const proofOfWork = (lastProof) => {
   if (!lastProof) return 1;
@@ -26,14 +34,14 @@ const proofOfWork = (lastProof) => {
 
 const consensus = () => {
   const otherChains = findNewChains();
-  let longestChain = blockchain;
 
   otherChains.forEach((chain) => {
-    if (longestChain.length < chain.length) {
-      longestChain = chain;
-    }
+    Blocks.fetch({ index: chain.index }).then((block) => {
+      if (!block) {
+        new Blocks(block.toJSON()).save().catch(error => console.error('consensus error:', error));
+      }
+    });
   });
-  blockchain = longestChain;
 };
 
 const findNewChains = () => {
@@ -51,69 +59,58 @@ const findNewChains = () => {
   return otherChains;
 };
 
+createBlockchain();
+
 router.post('/txion', (req, res) => {
   const nt = req.body;
 
-  ourTransactions.push(nt);
-
-  return res.send(`
-    New transaction:
-    FROM: ${nt.from}
-    TO: ${nt.to}
-    AMOUNT: ${nt.amount}
-    Submission successful
-  `);
+  if (!nt.from
+  && !nt.to
+  && !nt.amount) {
+    return res.status(500).json({ error: 'Error in data\'s body' });
+  }
+  return new Transactions(nt).save().then(() => {
+    return res.send(nt);
+  }).catch(error => res.status(500).json({ error }));
 });
 
 router.get('/mine', (req, res) => {
-  console.log('test');
-  const lastBlock = blockchain[blockchain.length - 1];
-  const lastProof = lastBlock.data.proofOfWork;
-  const proof = proofOfWork(lastProof);
+  return Blocks.getLastBlock().then(previousBlock => {
+    const lastProof =  previousBlock && previousBlock.data ? previousBlock.data.proofOfWork : null;
+    const proof = proofOfWork(lastProof);
 
-  ourTransactions.push({
-    from: 'network',
-    to: minerAddress,
-    amount: 1
+    return new Transactions({
+      from: 'network',
+      to: minerAddress,
+      amount: 1
+    }).save().then(() => {
+      return Transactions.fetchAll().then(ourTransactions => {
+        const data = {
+          proofOfWork: proof,
+          transactions: JSON.stringify(ourTransactions)
+        };
+
+        const minedBlock = createNextBlock({ data: JSON.stringify(data), previousBlock });
+
+        return new Blocks(minedBlock).save().then(() => res.json(minedBlock))
+          .catch(error => res.status(500).json({ error }));
+      });
+    }).catch(error => res.status(500).json({ error }));
   });
-
-  const data = {
-    proofOfWork: proof,
-    transactions: ourTransactions
-  };
-
-  const index = lastBlock.index + 1;
-  const previousHash = lastBlock.hash;
-
-  ourTransactions = [];
-
-  const minedBlock = new Block({ index, previousHash, data });
-
-  blockchain.push(minedBlock);
-
-  return res.json(minedBlock);
 });
 
 router.get('/blocks', (req, res) => {
   consensus();
-  const chainToSend = blockchain;
+  return Blocks.fetchAll().then((blockchain) => {
+    const chainToSend = blockchain.map((block) => ({
+      index: block.toJSON().index,
+      timestamp: block.toJSON().timestamp,
+      data: block.toJSON().data,
+      hash: block.toJSON().hash
+    }));
 
-  Array(chainToSend.length).fill().forEach((_, i) => {
-    const block = chainToSend[i];
-    const blockIndex = block.index;
-    const blockTimestamp = block.timestamp;
-    const blockData = block.data;
-    const blockHash = block.hash;
-
-    chainToSend[i] = {
-      index: blockIndex,
-      timestamp: blockTimestamp,
-      data: blockData,
-      hash: blockHash
-    };
-  });
-
-  return res.json(chainToSend);
+    return res.json(chainToSend);
+  }).catch(error => res.status(500).json({ error }));
 });
 
 export default router;

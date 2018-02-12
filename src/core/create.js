@@ -4,7 +4,7 @@ import Block from './block';
 const createGenesisBlock = () => (
   new Block({
     index: 0,
-    timestamp: moment(),
+    timestamp: moment().format(),
     data: 'Genesis Block',
     previousHash: '0'
   })

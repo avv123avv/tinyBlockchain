@@ -4,7 +4,7 @@ exports.up = function (knex, Promise) {
       .createTableIfNotExists('blocks', (table) => {
         table.increments('index');
         table.string('timestamp');
-        table.string('data');
+        table.text('data');
         table.string('previousHash');
         table.string('hash');
         table.timestamps();
