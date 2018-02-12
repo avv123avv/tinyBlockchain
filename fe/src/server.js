@@ -47,7 +47,7 @@ function renderHTML(componentHTML) {
           <title>Admin</title>
           <link rel="stylesheet" href="${assetUrl}/public/assets/styles.css">
       </head>
-      <body style="height: 100%; background-color: #37474F;">
+      <body style="height: 100%; background-color: #fafafa;">
         <div id="react-view">${componentHTML}</div>
         <script type="application/javascript" src="${assetUrl}/public/assets/bundle.js"></script>
       </body>
@@ -55,7 +55,7 @@ function renderHTML(componentHTML) {
   `;
 }
 
-const PORT = process.env.PORT || 3005;
+const PORT = process.env.PORT || 3007;
 
 app.listen(PORT, () => {
   console.log(`Server listening on: ${PORT}`);

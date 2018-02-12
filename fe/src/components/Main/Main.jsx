@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { withStyles, MuiThemeProvider } from 'material-ui/styles';
 
 import Paper from 'material-ui/Paper';
+import Card, { CardActions, CardContent } from 'material-ui/Card';
+import Button from 'material-ui/Button';
+import Typography from 'material-ui/Typography';
 
 import * as actions from 'redux/actions/walletActions';
 
@@ -31,9 +34,18 @@ class MainComponent extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <Paper className={classes.root}>
-          <div className={classes.wrapper}>
-            Hello Wallet!
-          </div>
+          <Card className={classes.card}>
+            <CardContent className={classes.cardContent}>
+              <Typography className={classes.title}>
+                <h1>Balance</h1>
+              </Typography>
+              <Typography component='p'>
+                <h2>
+                    1000 Coins
+                  </h2>
+              </Typography>
+            </CardContent>
+          </Card>
         </Paper>
       </MuiThemeProvider>);
   }

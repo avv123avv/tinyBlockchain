@@ -1,6 +1,8 @@
 export default theme => ({
   root: {
-    paddingRight: 2
+    paddingRight: 2,
+    maxWidth: 700,
+    margin: '0 auto'
   },
   highlight:
     theme.palette.type === 'light'
@@ -17,9 +19,6 @@ export default theme => ({
   },
   actions: {
     color: theme.palette.text.secondary
-  },
-  title: {
-    flex: '0 0 auto'
   },
   button: {
     margin: '5px'
@@ -39,5 +38,21 @@ export default theme => ({
   },
   error: {
     color: '#FF4081'
+  },
+
+  card: {
+    minWidth: 275,
+    margin: '0 auto'
+  },
+  title: {
+    marginBottom: 16,
+    fontSize: 14,
+    color: theme.palette.text.secondary
+  },
+  cardContent: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   }
 });
