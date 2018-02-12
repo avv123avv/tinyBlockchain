@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "nodemon": "NODE_PATH=./src nodemon server.js"
+    "nodemon": "NODE_PATH=./src nodemon server.js",
+    "test": "mocha test/test.*.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,14 +21,21 @@
     "body-parser": "^1.18.2",
     "bookshelf": "^0.12.0",
     "bookshelf-validate": "^2.0.3",
+    "chai": "^4.1.2",
     "co-express": "^1.2.2",
     "cors": "^2.8.4",
+    "crypto": "^1.0.1",
+    "eslint": "^4.16.0",
+    "eslint-plugin-node": "^5.2.1",
     "express": "^4.14.0",
     "express-session": "^1.15.6",
     "knex": "^0.14.2",
+    "mocha": "^5.0.0",
+    "moment": "^2.20.1",
     "mysql": "^2.15.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "request": "^2.83.0",
     "validator": "^9.2.0"
   },
   "devDependencies": {
