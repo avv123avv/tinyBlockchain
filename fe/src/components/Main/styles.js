@@ -60,5 +60,9 @@ export default theme => ({
   cardContentTransactions: {
     display: 'flex',
     flexDirection: 'column'
+  },
+
+  table: {
+    maxWidth: 700
   }
 });

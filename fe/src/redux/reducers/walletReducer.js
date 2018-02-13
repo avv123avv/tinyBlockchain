@@ -5,7 +5,11 @@ import {
 
   GET_TRANSACTIONS,
   GET_TRANSACTIONS_SUCCESS,
-  GET_TRANSACTIONS_ERROR
+  GET_TRANSACTIONS_ERROR,
+
+  SEND_NT,
+  SEND_NT_SUCCESS,
+  SEND_NT_ERROR
 } from 'redux/actions/walletActions';
 
 const initialState = {
@@ -14,6 +18,7 @@ const initialState = {
 
   loadingBalance: true,
   loadingTransactions: true,
+  loadingSend: false,
 
   error: {}
 };
@@ -56,6 +61,25 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loadingTransactions: false,
+        error: action.error
+      };
+    case SEND_NT:
+      return {
+        ...state,
+        loadingSend: true,
+        error: {}
+      };
+    case SEND_NT_SUCCESS:
+      return {
+        ...state,
+        loadingSend: false,
+        nt: action.nt,
+        error: {}
+      };
+    case SEND_NT_ERROR:
+      return {
+        ...state,
+        loadingSend: false,
         error: action.error
       };
     default:

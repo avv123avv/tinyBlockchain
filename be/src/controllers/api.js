@@ -64,11 +64,12 @@ createBlockchain();
 router.post('/txion', (req, res) => {
   const nt = req.body;
 
-  if (!nt.from
-  && !nt.to
+  if (!nt.to
   && !nt.amount) {
     return res.status(500).json({ error: 'Error in data\'s body' });
   }
+  
+  nt.from = minerAddress;
   return new Transactions(nt).save().then(() => {
     return res.send(nt);
   }).catch(error => res.status(500).json({ error }));
@@ -125,11 +126,12 @@ router.get('/balance', (req, res) => {
     let balance = 0;
     const nt = previousBlock && previousBlock.data ? JSON.parse(previousBlock.data).transactions : [];
     JSON.parse(nt).forEach(transact => {
-      if(transact.to === minerAddress || transact.from === minerAddress) {
+      if(transact.to === minerAddress) {
         balance += transact.amount;
+      } else if(transact.from === minerAddress) {
+        balance -= transact.amount;
       }
     });
-    console.log('balance', balance)
     return res.json(balance);
   }).catch(error => res.status(500).json({ error }));
 });
