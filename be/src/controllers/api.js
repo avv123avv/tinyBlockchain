@@ -64,11 +64,12 @@ createBlockchain();
 router.post('/txion', (req, res) => {
   const nt = req.body;
 
-  if (!nt.from
-  && !nt.to
+  if (!nt.to
   && !nt.amount) {
     return res.status(500).json({ error: 'Error in data\'s body' });
   }
+  
+  nt.from = minerAddress;
   return new Transactions(nt).save().then(() => {
     return res.send(nt);
   }).catch(error => res.status(500).json({ error }));
@@ -110,6 +111,28 @@ router.get('/blocks', (req, res) => {
     }));
 
     return res.json(chainToSend);
+  }).catch(error => res.status(500).json({ error }));
+});
+
+router.get('/transactions', (req, res) => {
+  return Blocks.getLastBlock().then(previousBlock => {
+    const ntToSend = previousBlock && previousBlock.data ? JSON.parse(previousBlock.data).transactions : [];
+    return res.json(ntToSend);
+  }).catch(error => res.status(500).json({ error }));
+});
+
+router.get('/balance', (req, res) => {
+  return Blocks.getLastBlock().then(previousBlock => {
+    let balance = 0;
+    const nt = previousBlock && previousBlock.data ? JSON.parse(previousBlock.data).transactions : [];
+    JSON.parse(nt).forEach(transact => {
+      if(transact.to === minerAddress) {
+        balance += transact.amount;
+      } else if(transact.from === minerAddress) {
+        balance -= transact.amount;
+      }
+    });
+    return res.json(balance);
   }).catch(error => res.status(500).json({ error }));
 });
 
