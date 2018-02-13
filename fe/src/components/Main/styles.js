@@ -42,11 +42,10 @@ export default theme => ({
 
   card: {
     minWidth: 275,
-    margin: '0 auto'
+    margin: '20px auto'
   },
   title: {
-    marginBottom: 16,
-    fontSize: 14,
+    fontSize: 26,
     color: theme.palette.text.secondary
   },
   cardContent: {
@@ -54,5 +53,9 @@ export default theme => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
+  },
+  cardContentTransactions: {
+    display: 'flex',
+    flexDirection: 'column'
   }
 });

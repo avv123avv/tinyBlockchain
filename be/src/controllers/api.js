@@ -113,5 +113,26 @@ router.get('/blocks', (req, res) => {
   }).catch(error => res.status(500).json({ error }));
 });
 
+router.get('/transactions', (req, res) => {
+  return Blocks.getLastBlock().then(previousBlock => {
+    const ntToSend = previousBlock && previousBlock.data ? JSON.parse(previousBlock.data).transactions : [];
+    return res.json(ntToSend);
+  }).catch(error => res.status(500).json({ error }));
+});
+
+router.get('/balance', (req, res) => {
+  return Blocks.getLastBlock().then(previousBlock => {
+    let balance = 0;
+    const nt = previousBlock && previousBlock.data ? JSON.parse(previousBlock.data).transactions : [];
+    JSON.parse(nt).forEach(transact => {
+      if(transact.to === minerAddress || transact.from === minerAddress) {
+        balance += transact.amount;
+      }
+    });
+    console.log('balance', balance)
+    return res.json(balance);
+  }).catch(error => res.status(500).json({ error }));
+});
+
 export default router;
 
