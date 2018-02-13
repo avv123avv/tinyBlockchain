@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import { withStyles, MuiThemeProvider } from 'material-ui/styles';
 
 import Card, { CardContent } from 'material-ui/Card';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
+import { CircularProgress } from 'material-ui/Progress';
 
 import * as actions from 'redux/actions/walletActions';
 
@@ -25,12 +27,14 @@ class MainComponent extends Component {
   };
 
   componentDidMount() {
+    this.props.getBalance();
+    this.props.getTransactions();
   }
 
   render() {
-    const { classes } = this.props;
-    const data = [];
+    const { classes, wallet: { balance, loadingBalance, transactions, loadingTransactions } } = this.props;
 
+    console.log('loadingTransactions', loadingTransactions);
     return (
       <MuiThemeProvider theme={theme}>
         <div className={classes.root}>
@@ -39,9 +43,16 @@ class MainComponent extends Component {
               <Typography className={classes.title}>
                   Balance
                 </Typography>
-              <div className={classes.balance}>
-                  1000 Coins
-                </div>
+              <div>
+                {loadingBalance &&
+                <div className={classes.dialogButtonWrapper}>
+                  <CircularProgress size={24} className={classes.dialogButtonProgress} />
+                </div>}
+                {!loadingBalance
+                && <Typography variant='subheading' color='textSecondary' className={classes.balance}>
+                  {balance} Coins
+                </Typography>}
+              </div>
               <Button variant='raised' color='primary' className={classes.button}>
                   Send Cash
                 </Button>
@@ -62,10 +73,10 @@ class MainComponent extends Component {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data.map(n => {
+                  {!loadingTransactions && transactions.map(n => {
                     return (
-                      <TableRow key={n.index}>
-                        <TableCell>{n.timestamp}</TableCell>
+                      <TableRow key={`row_${n.index}`}>
+                        <TableCell>{moment(n.timestamp).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
                         <TableCell numeric>{n.from}</TableCell>
                         <TableCell numeric>{n.to}</TableCell>
                         <TableCell numeric>{n.amount}</TableCell>
@@ -74,6 +85,10 @@ class MainComponent extends Component {
                   })}
                 </TableBody>
               </Table>
+              {loadingTransactions &&
+              <div className={classes.dialogButtonWrapper}>
+                <CircularProgress size={24} className={classes.dialogButtonProgress} />
+              </div>}
             </CardContent>
           </Card>
         </div>

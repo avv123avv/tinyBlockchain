@@ -23,6 +23,9 @@ export default theme => ({
   button: {
     margin: '5px'
   },
+  balance: {
+    fontSize: 28
+  },
 
   dialogButtonWrapper: {
     margin: theme.spacing.unit,
