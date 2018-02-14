@@ -1,0 +1,20 @@
+version: '2.1'
+services:
+  mysql:
+    build: ./mysql
+    restart: always
+  be:
+    build: ./be
+    volumes:
+      - ./be:/be
+    ports:
+      - "3006:3006"
+    tty: true
+  fe:
+    build: ./fe
+    volumes:
+      - ./fe:/fe
+    ports:
+      - "3007:3007"
+      - "8051:8051"
+    tty: true

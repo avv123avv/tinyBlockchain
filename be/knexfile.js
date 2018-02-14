@@ -4,8 +4,8 @@ module.exports = {
 
   client: 'mysql',
   connection: {
-    host: '127.0.0.1',
-    user: 'root',
+    host: 'mysql',
+    user: 'user',
     password: '12345',
     database: db,
     charset: 'utf8'

@@ -7,8 +7,8 @@ const ExtractTextPlugin  = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const publicPath         = 'http://localhost:8051/public/assets';
-const cssName            = process.env.NODE_ENV === 'production' ? 'styles-[hash].css' : 'styles.css';
-const jsName             = process.env.NODE_ENV === 'production' ? 'bundle-[hash].js' : 'bundle.js';
+const cssName            = process.env.NODE_ENV === 'production' ? 'styles.css' : 'styles.css';
+const jsName             = process.env.NODE_ENV === 'production' ? 'bundle.js' : 'bundle.js';
 
 const plugins = [
   new webpack.DefinePlugin({

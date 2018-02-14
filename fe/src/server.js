@@ -1,4 +1,5 @@
 import express  from 'express';
+import path  from 'path';
 import React    from 'react';
 import ReactDom from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
@@ -8,6 +9,8 @@ import { Provider } from 'react-redux';
 import configureStore from './redux/configureStore';
 
 const app = express();
+
+app.use('/public', express.static(path.join(__dirname, '../public')));
 
 app.use((req, res) => {
   const store = configureStore();
@@ -35,7 +38,7 @@ app.use((req, res) => {
   });
 });
 
-const assetUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8051' : '/';
+const assetUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8051' : 'http://localhost:3007';
 
 function renderHTML(componentHTML) {
   return `
